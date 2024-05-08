@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/add_client.css')}}">
+{% endblock %}
+
+<title>{{ title }}</title>
+
+{% block content %}
+    <section>
+        <h2 class="adding_client__header container">Добавление клиента</h2>
+
+        <div class="adding_client container">
+            <form method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.fullname.label }}<br>
+                    {{ form.fullname(size=50) }}<br>
+                </p>
+                <p>
+                    {{ form.birthday.label }}<br>
+                    {{ form.birthday() }}<br>
+                </p>
+                <p>
+                    {{ form.gender.label }}<br>
+                    {{ form.gender() }}<br>
+                </p>
+
+                <p>
+                    {{ form.place_residence.label }}<br>
+                    {{ form.place_residence() }}<br>
+                </p>
+
+                <p>
+                    {{ form.phone.label }}<br>
+                    {{ form.phone() }}<br>
+                </p>
+                <p>{{ form.submit() }}</p>
+            </form>
+        </div>
+        {% if form.errors %}
+        <ul class="errors">
+            {% for field, errors in form.errors.items() %}
+                {% for error in errors %}
+                    <li>{{ form[field].label.text }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+{% endif %}
+    </section>
+{% endblock %}
