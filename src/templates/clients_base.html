@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/clients_base.css')}}">
+{% endblock %}
+
+<title>{{ title }}</title>
+
+{% block content %}
+    <section>
+        <div class="clients-base container">
+            <h2 class="client-base__header">База клиентов</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>ФИО</th>
+                        <th>Дата рождения</th>
+                        <th>Пол</th>
+                        <th>Место прописки</th>
+                        <th>Номер телефона</th>
+                        <th>Мед. карта</th>
+                        <th>Дата регистрации</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <td id="id_client">{{ client.id }}</td>
+                            <td><a href=""></a>{{ client.fullname }}</td>
+                            <td>{{ client.birthday }}</td>
+                            <td>{{ client.gender }}</td>
+                            <td>{{ client.place_residence }}</td>
+                            <td>{{ client.phone }}</td>
+                            <td>{{ client.med_card }}</td>
+                            <td>{{ client.registered_at }}</td>
+
+                            <td id="action-button">
+                                <a class="update-button" href="{{ url_for('update_client_page.update_client', idx=client.id) }}">Изменить</a>
+                            </td>
+
+                            <td>
+                                <form action="{{ url_for('delete_client_page.delete_client', idx=client.id) }}" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить запись?');">
+                                  <button class="delete-button" type="submit">Удалить</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}

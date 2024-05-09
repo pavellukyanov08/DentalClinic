@@ -7,12 +7,14 @@ from wtforms.fields.datetime import DateField
 from wtforms.validators import DataRequired, Regexp
 
 
-class AddClientForm(FlaskForm):
+class ClientForm(FlaskForm):
     fullname = StringField("ФИО", validators=[DataRequired()])
     birthday = DateField("Дата рождения", format='%Y-%m-%d', validators=[DataRequired()])
-    gender = SelectField("Пол", choices=[('male', 'Male'), ('female', 'Female')], validators=[DataRequired()])
+    gender = SelectField("Пол", choices=[('мужской', 'Мужской'), ('женский', 'Женский')], validators=[DataRequired()])
     place_residence = StringField("Место прописки", validators=[DataRequired()])
     phone = StringField("Номер телефона", validators=[DataRequired()])
     registered_at = DateField('Дата регистрации', format='%Y-%m-%d', default=date.today(), validators=[DataRequired()])
 
     submit = SubmitField("Зарегистрировать клиента")
+    update = SubmitField("Обновить данные")
+    delete = SubmitField("Удалить клиента из базы")
