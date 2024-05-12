@@ -1,7 +1,7 @@
 import logging
 import os
 from flask import Flask, render_template
-from views import clients_base, add_client_page, update_client_page, delete_client_page
+from src.views import clients_base, add_client_page, update_client_page, delete_client_page
 from src.database import Config, db
 from flask_migrate import Migrate
 

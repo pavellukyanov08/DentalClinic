@@ -19,6 +19,28 @@ class Client(db.Model):
         return f"Клиент № {self.id}: ФИО: {self.fullname}"
 
 
+class Doctor(db.Model):
+    __tablename__ = 'doctors'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    fullname = db.Column(db.String(50), nullable=False)
+    specialization = db.Column(db.Date, nullable=False)
+    phone = db.Column(db.String(50), nullable=False)
+
+    registered_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class Appointment:
+    __tablename__ = 'appointments'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    time = db.Column(db.Time, nullable=False)
+    date = db.Column(db.Date, nullable=False)
+
+    doctor_id = db.Column(db.Integer, db.ForeignKey('doctors.id'), nullable=False)
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), nullable=False)
+
+
 class Role(db.Model):
     __tablename__ = 'roles'
 
