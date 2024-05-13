@@ -8,15 +8,36 @@ class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     fullname = db.Column(db.String(50), nullable=False)
     birthday = db.Column(db.Date, nullable=False)
+    # place_residence = db.Column(db.String(100), nullable=False)
     gender = db.Column(db.String(50), nullable=False)
-    place_residence = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(50), nullable=False)
     med_card = db.Column(db.String(1000), nullable=True)
 
     registered_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    place_residence_id = db.Column(db.Integer, db.ForeignKey("place_residence.id"), nullable=False)
+    place_residence = db.relationship(
+        'PlaceResidence',
+        back_populates='clients'
+    )
+
     def __repr__(self):
         return f"Клиент № {self.id}: ФИО: {self.fullname}"
+
+
+class PlaceResidence(db.Model):
+    __tablename__ = 'place_residence'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    city = db.Column(db.String(50), nullable=False)
+    street_name = db.Column(db.String(100), nullable=False)
+    house_num = db.Column(db.Integer, nullable=False)
+    num_apartment = db.Column(db.Integer, nullable=False)
+
+    clients = db.relationship(
+        'Client',
+        back_populates='place_residence', cascade="all, delete-orphan"
+    )
 
 
 class Doctor(db.Model):
@@ -29,8 +50,13 @@ class Doctor(db.Model):
 
     registered_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    appointment = db.relationship(
+        'Appointment',
+        back_populates='doctor'
+    )
 
-class Appointment:
+
+class Appointment(db.Model):
     __tablename__ = 'appointments'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -39,6 +65,11 @@ class Appointment:
 
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctors.id'), nullable=False)
     client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), nullable=False)
+
+    doctor = db.relationship(
+        'Doctor',
+        back_populates='appointments'
+    )
 
 
 class Role(db.Model):

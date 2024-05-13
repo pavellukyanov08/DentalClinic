@@ -20,15 +20,26 @@
 {#                {{ form.birthday.label }}#}
                 {{ form.birthday(class="form-birthday") }}
                 
-                {{ form.gender(class="form-gender", placeholder="Выберите пол") }}
 {#                {{ form.gender.label }}#}
+                {{ form.gender(class="form-gender", placeholder="Выберите пол") }}
 
-
-{#                {{ form.place_residence.label }}#}
-                {{ form.place_residence(class="form-place_res", placeholder="Место прописки") }}
-
-{#                {{ form.phone.label }}#}
+                {#                {{ form.phone.label }}#}
                 {{ form.phone(type="number", class="form-phone", id="phone", placeholder="+7 (999) 999-99-99", maxlength="11") }}
+
+
+{#                {{ form.city.label }}#}
+                {{ form.city(class="form-city", placeholder="Город") }}
+
+                {#                {{ form.street.label }}#}
+                {{ form.street(class="form-street", placeholder="Улица") }}
+
+                {#                {{ form.city.label }}#}
+                {{ form.house_num(class="form-house_num", placeholder="Номер дома") }}
+
+                {#                {{ form.apartment_num.label }}#}
+                {{ form.apartment_num(class="form-apartment_num", placeholder="Квартира") }}
+
+
 
                 {{ form.submit(class="form-submit") }}
             </form>

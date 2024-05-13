@@ -1,4 +1,5 @@
 from flask import render_template, request, redirect, url_for, Blueprint, flash
+from sqlalchemy import insert
 
 from src.clinic.forms import ClientForm
 from src.database import db
@@ -17,8 +18,7 @@ delete_client_page = Blueprint('delete_client_page', __name__)
 
 @clients_base.route('/')
 def index():
-    query = Client.query.order_by(Client.id)
-    clients = query
+    clients = Client.query.order_by(Client.id)
     return render_template('clients_base.html',
                            title='Главная страница',
                            menus=menu,
@@ -30,11 +30,14 @@ def add_client():
     form = ClientForm()
     if form.validate_on_submit():
         client = Client(fullname=form.fullname.data,
-                            birthday=form.birthday.data,
-                            gender=form.gender.data,
-                            place_residence=form.place_residence.data,
-                            phone=form.phone.data,
-                            )
+                        birthday=form.birthday.data,
+                        gender=form.gender.data,
+                        phone=form.phone.data,
+                        city=form.city.data,
+                        street=form.street.data,
+                        house_num=form.house_num.data,
+                        apartment_num=form.apartment_num.data,
+                        )
         db.session.add(client)
         db.session.commit()
         flash('Client added successfully!')
@@ -50,8 +53,12 @@ def update_client(idx):
         client.fullname = form.fullname.data
         client.birthday = form.birthday.data
         client.gender = form.gender.data
-        client.place_residence = form.place_residence.data
         client.phone = form.phone.data
+
+        client.city = form.city.data
+        client.street = form.city.data
+        client.house_num = form.city.data
+        client.apartment_num = form.city.data
         db.session.commit()
         flash('Client added successfully!')
         return redirect(url_for('clients_base.index'))
@@ -65,4 +72,3 @@ def delete_client(idx):
     db.session.commit()
     flash('Client added successfully!')
     return redirect(url_for('clients_base.index'))
-

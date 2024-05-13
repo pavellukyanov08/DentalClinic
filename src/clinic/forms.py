@@ -11,8 +11,14 @@ class ClientForm(FlaskForm):
     fullname = StringField("ФИО", validators=[DataRequired()])
     birthday = DateField("Дата рождения", format='%Y-%m-%d', validators=[DataRequired()])
     gender = SelectField("Пол", choices=[('мужской', 'Мужской'), ('женский', 'Женский')], validators=[DataRequired()])
-    place_residence = StringField("Место прописки", validators=[DataRequired()])
     phone = StringField("Номер телефона", validators=[DataRequired()])
+
+    # Адрес прописки
+    city = StringField("Город", validators=[DataRequired()])
+    street = StringField("Улица", validators=[DataRequired()])
+    house_num = StringField("Номер дома", validators=[DataRequired()])
+    apartment_num = StringField("Квартира", validators=[DataRequired()])
+
     registered_at = DateField('Дата регистрации', format='%Y-%m-%d', default=date.today(), validators=[DataRequired()])
 
     submit = SubmitField("Зарегистрировать клиента")
