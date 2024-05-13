@@ -1,3 +1,8 @@
+select, input, label {
+    margin: 0;
+    padding: 0;
+}
+
 .adding_client__header {
     text-align: center;
     padding: 30px 0 30px 0;
@@ -18,11 +23,13 @@ input {
     border: none;
     border-bottom: 1px solid black;
     height: 30px;
+    width: 100%;
 
 }
 
 input::placeholder {
     font-size: 15px;
+    padding: 7px;
 }
 
 input, label, select {
@@ -34,7 +41,21 @@ select {
     max-width: 100px;
 }
 
+.form-place_residence {
+    /*width: 100%;*/
+    display: grid;
+    grid-template-columns: repeat(2, 345px);
+    column-gap: 7px;
 
+}
+
+form p {
+    padding: 10px 0 10px 0;
+}
+
+.form-submit {
+    margin-top: 20px;
+}
 
 
 

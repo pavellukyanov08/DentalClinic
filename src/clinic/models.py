@@ -32,7 +32,7 @@ class PlaceResidence(db.Model):
     city = db.Column(db.String(50), nullable=False)
     street_name = db.Column(db.String(100), nullable=False)
     house_num = db.Column(db.Integer, nullable=False)
-    num_apartment = db.Column(db.Integer, nullable=False)
+    apartment_num = db.Column(db.Integer, nullable=False)
 
     clients = db.relationship(
         'Client',
@@ -45,12 +45,12 @@ class Doctor(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     fullname = db.Column(db.String(50), nullable=False)
-    specialization = db.Column(db.Date, nullable=False)
+    specialization = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(50), nullable=False)
 
     registered_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    appointment = db.relationship(
+    appointments = db.relationship(
         'Appointment',
         back_populates='doctor'
     )

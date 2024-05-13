@@ -3,7 +3,7 @@ from sqlalchemy import insert
 
 from src.clinic.forms import ClientForm
 from src.database import db
-from src.clinic.models import Client
+from src.clinic.models import Client, PlaceResidence
 
 menu = [
     {'name': 'База клиентов', 'url': '/'},
@@ -29,18 +29,33 @@ def index():
 def add_client():
     form = ClientForm()
     if form.validate_on_submit():
+        # проверка наличие места прописки
+        residence = PlaceResidence.query.filter_by(city=form.city.data,
+                                                   street_name=form.street.data,
+                                                   house_num=form.house_num.data,
+                                                   apartment_num=form.apartment_num.data,
+                                                   ).first()
+
+        if not residence:
+            residence = PlaceResidence(city=form.city.data,
+                                       street_name=form.street.data,
+                                       house_num=form.house_num.data,
+                                       apartment_num=form.apartment_num.data,
+                                       )
+            db.session.add(residence)
+            db.session.flush()
+
         client = Client(fullname=form.fullname.data,
                         birthday=form.birthday.data,
                         gender=form.gender.data,
                         phone=form.phone.data,
-                        city=form.city.data,
-                        street=form.street.data,
-                        house_num=form.house_num.data,
-                        apartment_num=form.apartment_num.data,
+                        place_residence = residence,
                         )
+
         db.session.add(client)
         db.session.commit()
         flash('Client added successfully!')
+
         return redirect(url_for('clients_base.index'))
     return render_template('add_client.html', menus=menu, form=form)
 

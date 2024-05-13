@@ -14,30 +14,29 @@
             <form method="post">
                 {{ form.hidden_tag() }}
                 
-{#                {{ form.fullname.label }}#}
                 {{ form.fullname(size=50, placeholder="Введите ФИО", class="form-fullname") }}
 
-{#                {{ form.birthday.label }}#}
                 {{ form.birthday(class="form-birthday") }}
                 
-{#                {{ form.gender.label }}#}
                 {{ form.gender(class="form-gender", placeholder="Выберите пол") }}
 
-                {#                {{ form.phone.label }}#}
                 {{ form.phone(type="number", class="form-phone", id="phone", placeholder="+7 (999) 999-99-99", maxlength="11") }}
 
 
-{#                {{ form.city.label }}#}
-                {{ form.city(class="form-city", placeholder="Город") }}
+                <p>Адрес прописки</p>
 
-                {#                {{ form.street.label }}#}
-                {{ form.street(class="form-street", placeholder="Улица") }}
+                <div class="form-place_residence">
+                    {{ form.city(class="place_residence-city", placeholder="Город") }}
 
-                {#                {{ form.city.label }}#}
-                {{ form.house_num(class="form-house_num", placeholder="Номер дома") }}
+                    {#                {{ form.street.label }}#}
+                    {{ form.street(class="place_residence-street", placeholder="Улица") }}
 
-                {#                {{ form.apartment_num.label }}#}
-                {{ form.apartment_num(class="form-apartment_num", placeholder="Квартира") }}
+                    {#                {{ form.city.label }}#}
+                    {{ form.house_num(class="place_residence-house_num", placeholder="Номер дома") }}
+
+                    {#                {{ form.apartment_num.label }}#}
+                    {{ form.apartment_num(class="place_residence-apartment_num", placeholder="Квартира") }}
+                </div>
 
 
 
