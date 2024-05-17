@@ -1,4 +1,9 @@
-.update-client__header {
+select, input, label {
+    margin: 0;
+    padding: 0;
+}
+
+.adding_user__header {
     text-align: center;
     padding: 30px 0 30px 0;
 }
@@ -18,11 +23,14 @@ input {
     border: none;
     border-bottom: 1px solid black;
     height: 30px;
+    width: 100%;
+    padding-left: 7px;
 
 }
 
 input::placeholder {
     font-size: 15px;
+    /*padding: 7px;*/
 }
 
 input, label, select {
@@ -39,7 +47,6 @@ select {
     display: grid;
     grid-template-columns: repeat(2, 345px);
     column-gap: 7px;
-
 }
 
 form p {
@@ -50,7 +57,20 @@ form p {
     margin-top: 20px;
 }
 
+.add-btn {
+    margin-top: 20px;
+    height: 35px;
+    border: none;
+    font-size: 15px;
+    border-radius: 10px;
+    transition: font-size 0.3s linear;
+}
 
+.add-btn:hover {
+    border: 1px solid black;
+    cursor: pointer;
+    font-size: 16px;
+}
 
 
 

@@ -23,10 +23,18 @@
     <header class="page-header">
         <nav class="page-header__wrapper container">
             <ul class="wrapper__nav-list">
-                {% for i in menus %}
+                {% for i in menus[:4] %}
                     <li><a href="{{ i.url }}">{{ i.name }}</a></li>
                 {% endfor %}
             </ul>
+
+            <div class="auth-block">
+                <ul class="wrapper__auth-list">
+                    {% for i in menus[4:] %}
+                        <li><a href="{{ i.url }}">{{ i.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
         </nav>
     </header>
 

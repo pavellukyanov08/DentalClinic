@@ -1,5 +1,6 @@
 from datetime import datetime
 from src.database import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class Client(db.Model):
@@ -45,14 +46,32 @@ class Doctor(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     fullname = db.Column(db.String(50), nullable=False)
-    specialization = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(50), nullable=False)
-
+    gender = db.Column(db.String(50), nullable=False)
     registered_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    specialization_id = db.Column(db.ForeignKey("specializations.id"), nullable=False)
 
     appointments = db.relationship(
         'Appointment',
         back_populates='doctor'
+    )
+
+    specialization = db.relationship(
+        'Specialization',
+        back_populates='doctors',
+    )
+
+
+class Specialization(db.Model):
+    __tablename__ = 'specializations'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False)
+
+    doctors = db.relationship(
+        'Doctor',
+        back_populates='specialization'
     )
 
 
@@ -71,22 +90,32 @@ class Appointment(db.Model):
         back_populates='appointments'
     )
 
-
-class Role(db.Model):
-    __tablename__ = 'roles'
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(50), nullable=False)
-
-
-class User(db.Model):
-    __tablename__ = 'users'
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
-
-    registered_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
+# class Role(db.Model):
+#     __tablename__ = 'roles'
+#
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     name = db.Column(db.String(50), nullable=False)
+#
+#
+# class User(db.Model):
+#     __tablename__ = 'users'
+#
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     name = db.Column(db.String(50), nullable=False)
+#     email = db.Column(db.String(50), nullable=False)
+#     hash_password = db.Column(db.String(128), nullable=False)
+#
+#     @property
+#     def password(self):
+#         raise AttributeError('password is not a readably attribute!')
+#
+#     @password.setter
+#     def password(self, password):
+#         self.hash_password = generate_password_hash(password)
+#
+#     def verify_password(self, password):
+#         return check_password_hash(self.hash_password, password)
+#
+#     registered_at = db.Column(db.DateTime, default=datetime.utcnow)
+#
+#     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)

@@ -1,4 +1,4 @@
-.update-client__header {
+.update-doctor__header {
     text-align: center;
     padding: 30px 0 30px 0;
 }
@@ -32,22 +32,6 @@ input, label, select {
 
 select {
     max-width: 100px;
-}
-
-.form-place_residence {
-    /*width: 100%;*/
-    display: grid;
-    grid-template-columns: repeat(2, 345px);
-    column-gap: 7px;
-
-}
-
-form p {
-    padding: 10px 0 10px 0;
-}
-
-.form-submit {
-    margin-top: 20px;
 }
 
 

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/registr.css')}}">
+{% endblock %}
+
+<title>{{ title }}</title>
+
+{% block content %}
+    <section>
+        <h2 class="adding_user__header container">Регистрация пользователя</h2>
+
+        <div class="adding_user container">
+            <form method="post">
+                {{ signup_form.hidden_tag() }}
+
+                {{ signup_form.email(class="form-email", placeholder="Выберите email") }}
+
+                {{ signup_form.fullname(class="form-fullname", placeholder="Введите ФИО") }}
+
+                {{ signup_form.hash_password(placeholder="Введите пароль") }}
+
+                {{ signup_form.hash_password_confirm(placeholder="Подтвердите пароль") }}
+
+                <button class="add-btn">Зарегистрироваться</button>
+            </form>
+        </div>
+
+        {% if signup_form .errors %}
+            <ul class="errors">
+                {% for field, errors in signup_form.errors.items() %}
+                    {% for error in errors %}
+                        <li>{{ signup_form[field].label.text }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+{% endblock %}
