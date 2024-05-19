@@ -3,7 +3,7 @@ from datetime import date
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.fields.datetime import DateField
-from wtforms.validators import DataRequired, EqualTo
+from wtforms.validators import DataRequired, EqualTo, Email
 
 
 class UserForm(FlaskForm):

@@ -228,7 +228,7 @@ def signup_user():
     if signup_form.validate_on_submit():
         user = User.query.filter_by(email=signup_form.email.data).first()
         if user is None:
-            hashed_pw = generate_password_hash(signup_form.hash_password.data, "sha256")
+            hashed_pw = generate_password_hash(signup_form.hash_password.data)
             user = User(email=signup_form.email.data,
                         fullname=signup_form.fullname.data,
                         hash_password=hashed_pw)

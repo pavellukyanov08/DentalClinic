@@ -4,24 +4,24 @@ from logging.config import fileConfig
 from flask import current_app
 
 from alembic import context
+import sys
+import os
+
+# Ensure the src directory is in the path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+
+from src.database import db
+from src.main import app
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
-from src.clinic.models import db as clinic_db
-from src.users.models import db as user_db
-from src.database import Config
-
-
-config.set_main_option('sqlalchemy.url', Config.SQLALCHEMY_DATABASE_URI)
-
-target_metadata = [clinic_db.metadata, user_db.metadata]
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
-
+target_metadata = db.metadata
 
 
 def get_engine():
@@ -74,7 +74,7 @@ def run_migrations_offline():
     """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url, target_metadata=get_metadata(), literal_binds=True
+        url=url, target_metadata=target_metadata, literal_binds=True
     )
 
     with context.begin_transaction():
@@ -109,7 +109,7 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            compare_server_default=True,
+            compare_server_defaults=True,
             **conf_args
         )
 
