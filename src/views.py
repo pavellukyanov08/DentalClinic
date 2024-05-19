@@ -10,7 +10,7 @@ from src.clinic.models import (
     Specialization,
     Doctor
 )
-from src.users.models import User, Role
+from src.users.models import User
 from src.users.forms import UserForm, LoginForm
 
 menu = [
@@ -28,6 +28,10 @@ menu = [
 # nav_menu = menu[:4]
 # auth_menu = menu[4:]
 
+admin_page = Blueprint('admin_page', __name__)
+admin_page_update_user = Blueprint('admin_page_update_user', __name__)
+delete_user_page = Blueprint('delete_user_page', __name__)
+
 clients_base = Blueprint('clients_base', __name__)
 doctors_base = Blueprint('doctors_base', __name__)
 
@@ -41,11 +45,62 @@ delete_client_page = Blueprint('delete_client_page', __name__)
 delete_doctor_page = Blueprint('delete_doctor_page', __name__)
 
 signup_user_page = Blueprint('signup_user_page', __name__)
-logout_user = Blueprint('logout_user', __name__)
+logout_page = Blueprint('logout_page', __name__)
 signin_user_page = Blueprint('signin_user_page', __name__)
 
 
+#admin page
+@admin_page.route('/admin', methods=['GET'])
+@login_required
+def admin():
+    users = User.query.order_by(User.id)
+    # admin_username = current_user.username
+    # if admin_username == 'admin':
+    #     return render_template("admin/admin.html")
+    # else:
+    #     flash("Вы должны иметь права администратора, для доступа на эту страницу")
+    #     return redirect(url_for('clients_base.get_clients'))
+    return render_template('admin/admin.html', users=users)
+
+
+@admin_page_update_user.route('/update_us/<int:idx>', methods=['GET', 'POST'])
+@login_required
+def update_user(idx):
+    user = User.query.get_or_404(idx)
+    admin_form = UserForm(obj=user)
+
+    if request.method == 'GET':
+        admin_form.email.data = user.email.city
+        admin_form.fullname.data = user.fullname.street_name
+        admin_form.fullname.data = user.username.street_name
+
+    if admin_form.validate_on_submit():
+        admin_form.email.data = user.email.city
+        admin_form.fullname.data = user.fullname.street_name
+        admin_form.fullname.data = user.username.street_name
+
+        db.session.commit()
+        flash('User updated successfully!')
+
+        return redirect(url_for('admin_page.admin'))
+
+    return render_template('admin/update_user.html', menus=menu, admin_form=admin_form)
+
+
+@delete_user_page.route('/delete/<int:idx>', methods=['POST'])
+@login_required
+def delete_user(idx):
+    user = User.query.get_or_404(idx)
+
+    db.session.delete(user)
+    db.session.commit()
+
+    flash('Client deleted successfully!')
+    return redirect(url_for('admin_page.admin'))
+
+
 @clients_base.route('/clients', methods=['GET'])
+@login_required
 def get_clients():
     clients = Client.query.order_by(Client.id)
     return render_template('clients_base.html',
@@ -55,6 +110,7 @@ def get_clients():
 
 
 @doctors_base.route('/doctors', methods=['GET'])
+@login_required
 def get_doctors():
     doctors = Doctor.query.order_by(Doctor.id)
     return render_template('doctors_base.html',
@@ -64,6 +120,7 @@ def get_doctors():
 
 
 @add_client_page.route('/add_client', methods=['GET', 'POST'])
+@login_required
 def add_client():
     client_form = ClientForm()
 
@@ -100,6 +157,7 @@ def add_client():
 
 
 @add_doctor_page.route('/add_doctor', methods=['GET', 'POST'])
+@login_required
 def add_doctor():
     doctor_form = DoctorForm()
     if doctor_form.validate_on_submit():
@@ -129,6 +187,7 @@ def add_doctor():
 
 
 @update_client_page.route('/update_cl/<int:idx>', methods=['GET', 'POST'])
+@login_required
 def update_client(idx):
     client = Client.query.get_or_404(idx)
     client_form = ClientForm(obj=client)
@@ -170,6 +229,7 @@ def update_client(idx):
 
 
 @delete_client_page.route('/delete/<int:idx>', methods=['POST'])
+@login_required
 def delete_client(idx):
     client = Client.query.get_or_404(idx)
 
@@ -181,6 +241,7 @@ def delete_client(idx):
 
 
 @update_doctor_page.route('/update_doc/<int:idx>', methods=['GET', 'POST'])
+@login_required
 def update_doctor(idx):
     doctor = Doctor.query.get_or_404(idx)
     doctor_form = DoctorForm(obj=doctor)
@@ -212,6 +273,7 @@ def update_doctor(idx):
 
 
 @delete_doctor_page.route('/delete/<int:idx>', methods=['POST'])
+@login_required
 def delete_doctor(idx):
     doctor = Doctor.query.get_or_404(idx)
     db.session.delete(doctor)
@@ -240,20 +302,29 @@ def signup_user():
     return render_template('auth/registr.html', menus=menu, signup_form=signup_form)
 
 
-# @signin_user_page.route('/signin', methods=['GET', 'POST'])
-# def signin_user():
-#     sigin_user = LoginForm()
-#
-#     if login_form.validate_on_submit():
-#         user = User.query.filter_by(email=login_form.email.data).first()
-#         if user:
-#             if check_password_hash(user.hashed_password, login_form.password.data):
-#                 login_user(user)
-#                 flash('Вы авторизованы! in successfully!')
-#
-#         db.session.add(user)
-#         db.session.commit()
-#         flash('Doctor added successfully!')
-#
-#         return redirect(url_for('clients_base.index'))
-#     return render_template('auth/registr.html', menus=menu, user_form=user_form)
+@signin_user_page.route('/signin', methods=['GET', 'POST'])
+def signin_user():
+    signin_form = LoginForm()
+
+    if signin_form.validate_on_submit():
+        user = User.query.filter_by(email=signin_form.email.data).first()
+        if user:
+            if check_password_hash(user.hash_password, signin_form.password.data):
+                login_user(user)
+                flash('Вы авторизованы!')
+                return redirect(url_for('clients_base.get_clients'))
+            else:
+                flash("Неверное имя пользователя или пароль!")
+        else:
+            flash("Пользователь не найден!")
+
+        return redirect(url_for('clients_base.get_clients'))
+    return render_template('auth/authoriz.html', menus=menu, signin_form=signin_form)
+
+
+@logout_page.route('/logout', methods=['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    flash("Вы вышли из профиля")
+    return redirect(url_for('signin_user_page.signin_user'))

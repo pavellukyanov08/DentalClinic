@@ -3,7 +3,7 @@ select, input, label {
     padding: 0;
 }
 
-.registr__header {
+.authoriz__header {
     text-align: center;
     padding: 30px 0 30px 0;
 }
@@ -57,7 +57,7 @@ form p {
     margin-top: 20px;
 }
 
-.add-btn {
+.authoriz-btn {
     margin-top: 20px;
     height: 35px;
     border: none;
@@ -65,7 +65,7 @@ form p {
     border-radius: 10px;
 }
 
-.add-btn:hover {
+.authoriz-btn:hover {
     border: 1px solid black;
     cursor: pointer;
     font-size: 16px;

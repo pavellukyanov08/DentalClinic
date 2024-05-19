@@ -1,9 +1,9 @@
 from datetime import datetime
 
 from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from src.database import db
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class Role(db.Model):
@@ -19,6 +19,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     fullname = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String(100), nullable=True, unique=True)
     hash_password = db.Column(db.String(256), nullable=False)
 
     @property

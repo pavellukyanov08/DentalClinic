@@ -8,13 +8,13 @@
 
 {% block content %}
     <section>
-        <h2 class="adding_user__header container">Регистрация пользователя</h2>
+        <h2 class="registr__header container">Регистрация пользователя</h2>
 
-        <div class="adding_user container">
+        <div class="registr container">
             <form method="post">
                 {{ signup_form.hidden_tag() }}
 
-                {{ signup_form.email(class="form-email", placeholder="Выберите email") }}
+                {{ signup_form.email(class="form-email", placeholder="Введите email") }}
 
                 {{ signup_form.fullname(class="form-fullname", placeholder="Введите ФИО") }}
 

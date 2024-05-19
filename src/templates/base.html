@@ -23,22 +23,39 @@
     <header class="page-header">
         <nav class="page-header__wrapper container">
             <ul class="wrapper__nav-list">
-                {% for i in menus[:4] %}
-                    <li><a href="{{ i.url }}">{{ i.name }}</a></li>
-                {% endfor %}
-            </ul>
+                {% if current_user.is_authenticated%}
+{#                    {% for i in menus %}#}
+                    <li><a href="{{ url_for('clients_base.get_clients') }}">База клиентов</a></li>
+                    <li><a href="{{ url_for('doctors_base.get_doctors') }}">База врачей</a></li>
+                    <li><a href="{{ url_for('add_client_page.add_client') }}">Добавить клиента</a></li>
+                    <li><a href="{{ url_for('add_doctor_page.add_doctor') }}">Добавить врача</a></li>
 
-            <div class="auth-block">
-                <ul class="wrapper__auth-list">
-                    {% for i in menus[4:] %}
-                        <li><a href="{{ i.url }}">{{ i.name }}</a></li>
-                    {% endfor %}
+                    {% if current_user.username == 'admin' %}
+                        <li><a href="{{ url_for('admin_page.admin') }}">Админка</a></li>
+                    {% endif %}
+
+                    <li><a href="{{ url_for('logout_page.logout') }}">Выйти</a></li>
+
+
+{#                    {% endfor %}#}
                 </ul>
-            </div>
+
+            {% else %}
+                <div class="auth-block">
+                    <ul class="wrapper__auth-list">
+                        {% for i in menus[4:-1] %}
+                            <li><a href="{{ i.url }}">{{ i.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
         </nav>
     </header>
 
 {% block content %}
+{% endblock %}
+
+{% block messages %}
 {% endblock %}
 </body>
 </html>
