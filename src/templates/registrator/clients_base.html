@@ -31,14 +31,16 @@
                             <td><a href=""></a>{{ client.fullname }}</td>
                             <td>{{ client.birthday }}</td>
                             <td>{{ client.gender }}</td>
+
+                            <td>
+                                <span>{{ client.place_residence.city }}</span>,
+                                <span>{{ client.place_residence.street_name }}</span>,
+                                <span>{{ client.place_residence.house_num }}</span>,
+                                <span>{{ client.place_residence.apartment_num }}</span>
+                            </td>
+
                             <td>{{ client.phone }}</td>
-
-                            <td>{{ client.place_residence.city }}</td>
-                            <td>{{ client.place_residence.street_name }}</td>
-                            <td>{{ client.place_residence.house_num }}</td>
-                            <td>{{ client.place_residence.apartment_num }}</td>
-
-                            <td>{{ client.med_card }}</td>
+                            <td>{{ client.med_card if client.med_card is not none else '' }}</td>
                             <td>{{ client.registered_at }}</td>
 
                             <td id="action-button">

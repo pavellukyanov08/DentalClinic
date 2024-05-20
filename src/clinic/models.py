@@ -22,6 +22,11 @@ class Client(db.Model):
         back_populates='clients'
     )
 
+    appointments = db.relationship(
+        'Appointment',
+        back_populates='client'
+    )
+
     def __repr__(self):
         return f"Клиент № {self.id}: ФИО: {self.fullname}"
 
@@ -87,5 +92,10 @@ class Appointment(db.Model):
 
     doctor = db.relationship(
         'Doctor',
+        back_populates='appointments'
+    )
+
+    client = db.relationship(
+        'Client',
         back_populates='appointments'
     )

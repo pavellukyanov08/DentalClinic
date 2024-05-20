@@ -30,8 +30,11 @@
                     <li><a href="{{ url_for('add_client_page.add_client') }}">Добавить клиента</a></li>
                     <li><a href="{{ url_for('add_doctor_page.add_doctor') }}">Добавить врача</a></li>
 
+                    <li><a href="{{ url_for('book_appointment_page.book_appointment') }}">Записать на прием</a></li>
+
+
                     {% if current_user.username == 'admin' %}
-                        <li><a href="{{ url_for('admin_page.admin') }}">Админка</a></li>
+                        <li><a href="{{ url_for('admin.index') }}">Админка</a></li>
                     {% endif %}
 
                     <li><a href="{{ url_for('logout_page.logout') }}">Выйти</a></li>

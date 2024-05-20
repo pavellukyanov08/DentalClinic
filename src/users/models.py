@@ -36,3 +36,5 @@ class User(db.Model, UserMixin):
     registered_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=True)
+
+    role = db.relationship('Role', backref=db.backref('users', lazy=True))

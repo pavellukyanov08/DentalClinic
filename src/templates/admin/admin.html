@@ -44,5 +44,39 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="roles-list container">
+            <h2 class="roles-list__header">Список ролей</h2>
+
+            <p><a href="">Добавить роль</a></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Роль</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for role in roles %}
+                        <tr>
+                            <td id="id_user">{{ role.id }}</td>
+                            <td>{{ role.name }}</td>
+
+{#                            <td id="action-button">#}
+{#                                <a class="update-button" href="{{ url_for('admin_page_update_user.update_user', idx=user.id) }}">Изменить</a>#}
+{#                            </td>#}
+{##}
+{#                            <td>#}
+{#                                <form action="{{ url_for('delete_user_page.delete_user', idx=user.id) }}" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить запись?');">#}
+{#                                  <button class="delete-button" type="submit">Удалить</button>#}
+{#                                </form>#}
+{#                            </td>#}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
     </section>
 {% endblock %}

@@ -2,16 +2,17 @@ from flask import render_template, request, redirect, url_for, Blueprint, flash
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from src.clinic.forms import ClientForm, DoctorForm
+from src.clinic.forms import ClientForm, DoctorForm, AppointmentForm
 from src.database import db
 from src.clinic.models import (
     Client,
     PlaceResidence,
     Specialization,
-    Doctor
+    Doctor,
+    Appointment,
 )
-from src.users.models import User
-from src.users.forms import UserForm, LoginForm
+from src.users.models import User, Role
+from src.users.forms import UserForm, LoginForm, RegistrForm
 
 menu = [
     {'name': 'База клиентов', 'url': '/clients'},
@@ -28,14 +29,11 @@ menu = [
 # nav_menu = menu[:4]
 # auth_menu = menu[4:]
 
-admin_page = Blueprint('admin_page', __name__)
-admin_page_update_user = Blueprint('admin_page_update_user', __name__)
-delete_user_page = Blueprint('delete_user_page', __name__)
-
 clients_base = Blueprint('clients_base', __name__)
 doctors_base = Blueprint('doctors_base', __name__)
 
 add_client_page = Blueprint('add_client_page', __name__)
+book_appointment_page = Blueprint('book_appointment_page', __name__)
 add_doctor_page = Blueprint('add_doctor_page', __name__)
 
 update_client_page = Blueprint('update_client_page', __name__)
@@ -49,61 +47,11 @@ logout_page = Blueprint('logout_page', __name__)
 signin_user_page = Blueprint('signin_user_page', __name__)
 
 
-#admin page
-@admin_page.route('/admin', methods=['GET'])
-@login_required
-def admin():
-    users = User.query.order_by(User.id)
-    # admin_username = current_user.username
-    # if admin_username == 'admin':
-    #     return render_template("admin/admin.html")
-    # else:
-    #     flash("Вы должны иметь права администратора, для доступа на эту страницу")
-    #     return redirect(url_for('clients_base.get_clients'))
-    return render_template('admin/admin.html', users=users)
-
-
-@admin_page_update_user.route('/update_us/<int:idx>', methods=['GET', 'POST'])
-@login_required
-def update_user(idx):
-    user = User.query.get_or_404(idx)
-    admin_form = UserForm(obj=user)
-
-    if request.method == 'GET':
-        admin_form.email.data = user.email.city
-        admin_form.fullname.data = user.fullname.street_name
-        admin_form.fullname.data = user.username.street_name
-
-    if admin_form.validate_on_submit():
-        admin_form.email.data = user.email.city
-        admin_form.fullname.data = user.fullname.street_name
-        admin_form.fullname.data = user.username.street_name
-
-        db.session.commit()
-        flash('User updated successfully!')
-
-        return redirect(url_for('admin_page.admin'))
-
-    return render_template('admin/update_user.html', menus=menu, admin_form=admin_form)
-
-
-@delete_user_page.route('/delete/<int:idx>', methods=['POST'])
-@login_required
-def delete_user(idx):
-    user = User.query.get_or_404(idx)
-
-    db.session.delete(user)
-    db.session.commit()
-
-    flash('Client deleted successfully!')
-    return redirect(url_for('admin_page.admin'))
-
-
 @clients_base.route('/clients', methods=['GET'])
 @login_required
 def get_clients():
     clients = Client.query.order_by(Client.id)
-    return render_template('clients_base.html',
+    return render_template('registrator/clients_base.html',
                            title='Главная страница',
                            menus=menu,
                            clients=clients)
@@ -113,7 +61,7 @@ def get_clients():
 @login_required
 def get_doctors():
     doctors = Doctor.query.order_by(Doctor.id)
-    return render_template('doctors_base.html',
+    return render_template('registrator/doctors_base.html',
                            title='Главная страница',
                            menus=menu,
                            doctors=doctors)
@@ -153,7 +101,39 @@ def add_client():
         flash('Client added successfully!')
 
         return redirect(url_for('clients_base.get_clients'))
-    return render_template('add_client.html', menus=menu, client_form=client_form)
+    return render_template('registrator/add_client.html', menus=menu, client_form=client_form)
+
+
+@book_appointment_page.route('/add_appointment', methods=['GET', 'POST'])
+@login_required
+def book_appointment():
+    appointment_form = AppointmentForm()
+
+    clients = Client.query.with_entities(Client.id, Client.fullname).all()
+    appointment_form.client_name.choices = [(client.id, client.fullname) for client in clients]
+
+    doctors = Doctor.query.with_entities(Doctor.id, Doctor.fullname).all()
+    appointment_form.doctor_name.choices = [(doctor.id, doctor.fullname) for doctor in doctors]
+
+    if appointment_form.validate_on_submit():
+        client_id = appointment_form.client_name.data
+        doctor_id = appointment_form.doctor_name.data
+        appointment_date = appointment_form.date_appointment.data
+        appointment_time = appointment_form.time_appointment.data
+
+        # Здесь вы можете сохранить запись в базе данных
+        appointment = Appointment(
+            client_id=client_id,
+            doctor_id=doctor_id,
+            date=appointment_date,
+            time=appointment_time
+        )
+        db.session.add(appointment)
+        db.session.commit()
+        # flash('Client added successfully!')
+
+        return redirect(url_for('clients_base.get_clients'))
+    return render_template('registrator/add_appointment.html', menus=menu, appointment_form=appointment_form)
 
 
 @add_doctor_page.route('/add_doctor', methods=['GET', 'POST'])
@@ -182,8 +162,8 @@ def add_doctor():
         db.session.commit()
         flash('Doctor added successfully!')
 
-        return redirect(url_for('clients_base.index'))
-    return render_template('doctor_detail.html', menus=menu, doctor_form=doctor_form)
+        return redirect(url_for('doctors_base.get_doctors'))
+    return render_template('registrator/add_doctor.html', menus=menu, doctor_form=doctor_form)
 
 
 @update_client_page.route('/update_cl/<int:idx>', methods=['GET', 'POST'])
@@ -225,13 +205,14 @@ def update_client(idx):
 
         return redirect(url_for('clients_base.get_clients'))
 
-    return render_template('client_detail.html', menus=menu, client_form=client_form)
+    return render_template('registrator/client_detail.html', menus=menu, client_form=client_form)
 
 
-@delete_client_page.route('/delete/<int:idx>', methods=['POST'])
+@delete_client_page.route('/delete_cl/<int:idx>', methods=['POST'])
 @login_required
 def delete_client(idx):
     client = Client.query.get_or_404(idx)
+    print(client)
 
     db.session.delete(client)
     db.session.commit()
@@ -269,10 +250,10 @@ def update_doctor(idx):
 
         return redirect(url_for('doctors_base.get_doctors'))
 
-    return render_template('doctor_detail.html', menus=menu, doctor_form=doctor_form)
+    return render_template('registrator/doctor_detail.html', menus=menu, doctor_form=doctor_form)
 
 
-@delete_doctor_page.route('/delete/<int:idx>', methods=['POST'])
+@delete_doctor_page.route('/delete_doc/<int:idx>', methods=['POST'])
 @login_required
 def delete_doctor(idx):
     doctor = Doctor.query.get_or_404(idx)
@@ -285,7 +266,7 @@ def delete_doctor(idx):
 # Authentification
 @signup_user_page.route('/signup', methods=['GET', 'POST'])
 def signup_user():
-    signup_form = UserForm()
+    signup_form = RegistrForm()
 
     if signup_form.validate_on_submit():
         user = User.query.filter_by(email=signup_form.email.data).first()

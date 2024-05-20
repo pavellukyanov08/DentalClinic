@@ -8,15 +8,23 @@
 
 {% block content %}
     <section>
-        <h2 class="update_user__header container">Добавление клиента</h2>
+        <h2 class="update_user__header container">Данные пользователя</h2>
 
         <div class="update_user container">
             <form method="post">
                 {{ admin_form.hidden_tag() }}
                 
+                {{ admin_form.email.label() }}
                 {{ admin_form.email(size=50, placeholder="Введите email", class="form-email") }}
 
+                {{ admin_form.fullname.label() }}
                 {{ admin_form.fullname(class="form-fullname") }}
+
+                {{ admin_form.username.label() }}
+                {{ admin_form.username(class="form-username") }}
+
+
+                {{ admin_form.role(class="form-role") }}
 
                 <button class="update-btn">Изменить данные</button>
             </form>
