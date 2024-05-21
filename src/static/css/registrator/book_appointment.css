@@ -1,4 +1,4 @@
-.adding_client__header {
+.add_appointment__header {
     text-align: center;
     padding: 30px 0 30px 0;
 }
@@ -30,8 +30,20 @@ input, label, select {
     margin-bottom: 7px;
 }
 
-select {
-    max-width: 100px;
+.form-place_residence {
+    /*width: 100%;*/
+    display: grid;
+    grid-template-columns: repeat(2, 345px);
+    column-gap: 7px;
+
+}
+
+form p {
+    padding: 10px 0 10px 0;
+}
+
+.form-submit {
+    margin-top: 20px;
 }
 
 

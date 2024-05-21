@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/registrator/book_appointment.css')}}">
+{% endblock %}
+<title>{{ title }}</title>
+
+{% block content %}
+    <section>
+        <h2 class="add_appointment__header container">Запись на прием</h2>
+
+        <div class="add_appointment container">
+            <form method="post">
+                {{ appointment_form.hidden_tag() }}
+
+                {{ appointment_form.client_name(class="form-client_name") }}
+
+                {{ appointment_form.doctor_name(class="form-doctor_name") }}
+
+                {{ appointment_form.date_appointment(class="form-date_appointment") }}
+
+                {{ appointment_form.time_appointment(class="form-time_appointment") }}
+
+                <button class="update-btn">Записать на прием</button>
+            </form>
+        </div>
+
+{#        {% for message in get_flashed_messages() %}#}
+{#            <div class="alert alert-warning alert-dismissible show" role="alert">#}
+{#            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>#}
+{#            </div>#}
+{#                {{ message }}#}
+{#        {% endfor %}#}
+        {% if appointment_form.errors %}
+            <ul class="errors">
+                {% for field, errors in appointment_form.errors.items() %}
+                    {% for error in errors %}
+                        <li>{{ appointment_form[field].label.text }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+{% endblock %}

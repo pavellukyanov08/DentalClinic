@@ -43,7 +43,16 @@ a {
   padding: 30px 0 30px 0;
 }
 
+nav {
+  display: flex;
+  justify-content: space-between;
+}
+
 .wrapper__nav-list {
+  display: flex;
+}
+
+.wrapper__auth-list {
   display: flex;
 }
 
