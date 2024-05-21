@@ -1,0 +1,41 @@
+.update-doctor__header {
+    text-align: center;
+    padding: 30px 0 30px 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #f9fdff;
+}
+
+input {
+    border: none;
+    border-bottom: 1px solid black;
+    height: 30px;
+
+}
+
+input::placeholder {
+    font-size: 15px;
+}
+
+input, label, select {
+    display: block;
+    margin-bottom: 7px;
+}
+
+select {
+    max-width: 100px;
+}
+
+
+
+
+
+

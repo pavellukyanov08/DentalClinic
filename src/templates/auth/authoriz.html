@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/authoriz.css')}}">
+{% endblock %}
+
+<title>{{ title }}</title>
+
+{% block content %}
+    <section>
+        <h2 class="authoriz__header container">Авторизация</h2>
+        
+        <div class="authoriz container">
+            <form method="post">
+                {{ signin_form.hidden_tag() }}
+
+                {{ signin_form.email(class="form-email", placeholder="Выберите email") }}
+
+                {{ signin_form.password(placeholder="Введите пароль") }}
+
+                <button class="authoriz-btn">Авторизоваться</button>
+            </form>
+        </div>
+
+        {% block messages %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if signin_form.errors %}
+                    <ul class="errors">
+                        {% for field, errors in signin_form.errors.items() %}
+                            {% for error in errors %}
+                                <li>{{ signin_form[field].label.text }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        {% endblock %}
+    </section>
+{% endblock %}

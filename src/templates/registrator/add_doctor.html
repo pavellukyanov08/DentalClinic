@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/registrator/add_doctor.css')}}">
+{% endblock %}
+<title>{{ title }}</title>
+
+{% block content %}
+    <section>
+        <h2 class="adding_doctor__header container">Добавление врача</h2>
+
+        <div class="adding_doctor container">
+            <form method="post">
+                {{ doctor_form.hidden_tag() }}
+                
+                {{ doctor_form.fullname(size=50, placeholder="Введите ФИО", class="form-fullname") }}
+
+                {{ doctor_form.gender(class="form-gender", placeholder="Выберите пол") }}
+
+                {{ doctor_form.phone(type="number", class="form-phone", id="phone", placeholder="+7 (999) 999-99-99", maxlength="11") }}
+
+                {{ doctor_form.specialization(placeholder="Введите специализацию") }}
+
+                <button class="registr-btn">Зарегистрировать врача</button>
+            </form>
+        </div>
+
+{#        {% for message in get_flashed_messages() %}#}
+{#            <div class="alert alert-warning alert-dismissible show" role="alert">#}
+{#            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>#}
+{#            </div>#}
+{#                {{ message }}#}
+{#        {% endfor %}#}
+        {% if doctor_form.errors %}
+            <ul class="errors">
+                {% for field, errors in doctor_form.errors.items() %}
+                    {% for error in errors %}
+                        <li>{{ doctor_form[field].label.text }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+{% endblock %}
