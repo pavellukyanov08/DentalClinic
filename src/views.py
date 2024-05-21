@@ -34,6 +34,10 @@ doctors_base = Blueprint('doctors_base', __name__)
 
 add_client_page = Blueprint('add_client_page', __name__)
 book_appointment_page = Blueprint('book_appointment_page', __name__)
+appointments_list = Blueprint('appointments_list', __name__)
+delete_appointment_page = Blueprint('delete_appointment_page', __name__)
+
+
 add_doctor_page = Blueprint('add_doctor_page', __name__)
 
 update_client_page = Blueprint('update_client_page', __name__)
@@ -134,6 +138,26 @@ def book_appointment():
 
         return redirect(url_for('clients_base.get_clients'))
     return render_template('registrator/add_appointment.html', menus=menu, appointment_form=appointment_form)
+
+
+@appointments_list.route('/appointments', methods=['GET'])
+@login_required
+def get_appointments():
+    appointments = Appointment.query.order_by(Appointment.date).all()
+    return render_template('registrator/appointments_base.html', appointments=appointments)
+
+
+@delete_appointment_page.route('/delete_apnt/<int:idx>', methods=['POST'])
+@login_required
+def delete_appointment(idx):
+    appointment = Appointment.query.get_or_404(idx)
+
+    db.session.delete(appointment)
+    db.session.commit()
+
+    flash('Client deleted successfully!')
+    return redirect(url_for('appointments_list.get_appointments'))
+
 
 
 @add_doctor_page.route('/add_doctor', methods=['GET', 'POST'])

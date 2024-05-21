@@ -27,6 +27,8 @@
 {#                    {% for i in menus %}#}
                     <li><a href="{{ url_for('clients_base.get_clients') }}">База клиентов</a></li>
                     <li><a href="{{ url_for('doctors_base.get_doctors') }}">База врачей</a></li>
+                    <li><a href="{{ url_for('appointments_list.get_appointments') }}">Список забронированных танонов</a></li>
+
                     <li><a href="{{ url_for('add_client_page.add_client') }}">Добавить клиента</a></li>
                     <li><a href="{{ url_for('add_doctor_page.add_doctor') }}">Добавить врача</a></li>
 

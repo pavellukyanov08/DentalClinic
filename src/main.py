@@ -11,6 +11,7 @@ from src.views import (clients_base,
                        doctors_base,
                        add_client_page,
                        book_appointment_page,
+                       appointments_list,
                        add_doctor_page,
                        update_client_page,
                        update_doctor_page,
@@ -18,7 +19,7 @@ from src.views import (clients_base,
                        delete_doctor_page,
                        signup_user_page,
                        signin_user_page,
-                       logout_page,
+                       logout_page, delete_appointment_page,
                        )
 from src.admin.views import (
     admin_page,
@@ -65,6 +66,9 @@ app.register_blueprint(doctors_base)
 
 app.register_blueprint(add_client_page)
 app.register_blueprint(book_appointment_page)
+app.register_blueprint(appointments_list)
+app.register_blueprint(delete_appointment_page)
+
 app.register_blueprint(add_doctor_page)
 
 app.register_blueprint(update_client_page)
