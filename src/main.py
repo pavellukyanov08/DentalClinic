@@ -3,29 +3,36 @@ import os
 from flask import Flask, render_template, redirect, url_for
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask_login import LoginManager, login_required
+from flask_login import login_user, LoginManager, login_required
 
 from src.clinic.models import Doctor, Client
 from src.users.models import User, Role
-from src.views import (clients_base,
-                       doctors_base,
-                       add_client_page,
-                       book_appointment_page,
-                       appointments_list,
-                       add_doctor_page,
-                       update_client_page,
-                       update_doctor_page,
-                       delete_client_page,
-                       delete_doctor_page,
-                       signup_user_page,
-                       signin_user_page,
-                       logout_page, delete_appointment_page,
-                       )
+
+from src.users.views import (
+    signup_user_page,
+    signin_user_page,
+    logout_page,
+)
 from src.admin.views import (
     admin_page,
     update_user_page,
     delete_user_page,
 )
+
+from src.clinic.views import (
+    clients_base,
+    doctors_base,
+    add_client_page,
+    delete_doctor_page,
+    book_appointment_page,
+    delete_appointment_page,
+    appointments_list,
+    add_doctor_page,
+    update_client_page,
+    update_doctor_page,
+    delete_client_page,
+)
+
 from src.database import Config, db
 from flask_migrate import Migrate
 
